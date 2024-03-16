@@ -1,5 +1,7 @@
+from window import create_window
+
 def main():
-    print("Hello, World!")
+    create_window()
 
 if __name__ == "__main__":
     main()
