@@ -8,10 +8,19 @@ class Timer:
         self.rest_state = False
 
     def stop_timer(self, root: Tk, timer_label: ttk.Label):
-        pass
+        if self.timer_event is not None:
+            root.after_cancel(self.timer_event)
+            self.timer_event = None
+            self.stopped = True
 
     def reset_timer(self, root: Tk, timer_label: ttk.Label):
-        pass
+        if(self.timer_event is not None):
+            root.after_cancel(self.timer_event)
+            self.timer_event = None
+        self.stopped = False
+        self.time = 1500
+        self.rest_state = False
+        timer_label.configure(text="25:00")
 
     def countdown(self, root: Tk, timer_label: ttk.Label):
         if self.time > 0:
@@ -38,4 +47,3 @@ class Timer:
         elif self.timer_event is None and self.stopped:
             self.countdown(root, timer_label)
             self.stopped = False
-            self.stopped_time = 0
