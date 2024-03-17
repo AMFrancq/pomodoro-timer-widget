@@ -1,8 +1,9 @@
-from window import create_window
+from window import Window
 
 
 def main():
-    create_window()
+    app = Window()
+    app.run()
 
 
 if __name__ == "__main__":
