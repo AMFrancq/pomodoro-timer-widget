@@ -1,38 +1,59 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
+from tkinter import ttk
 from src.window import Window
 
 
 class TestWindow(unittest.TestCase):
-    @patch('src.window.Tk')
-    @patch('src.window.Timer')
-    def setUp(self, mock_timer, mock_tk):
-        self.mock_timer = mock_timer
-        self.mock_tk = mock_tk
+    def setUp(self):
+        """Sets up the test environment before each test."""
         self.window = Window()
-        self.window.frm.grid = MagicMock()
-        self.window.title_label.grid = MagicMock()
-        self.window.timer_label.grid = MagicMock()
-        self.window.start_button.grid = MagicMock()
-        self.window.pause_button.grid = MagicMock()
-        self.window.reset_button.grid = MagicMock()
 
     def test_create_frame(self):
-        self.window.create_frame()
-        self.window.frm.grid.assert_called_once()
+        """
+        Tests the create_frame method.
+        Checks that the frame is created and configured correctly.
+        """
+        self.assertIsInstance(self.window.frm, ttk.Frame)
+        self.assertEqual(str(self.window.frm['padding'][0]), '10')
 
     def test_create_labels(self):
-        self.window.create_labels()
-        self.window.title_label.grid.assert_called_once_with(column=1, row=0)
-        self.window.timer_label.grid.assert_called_once_with(column=1, row=1)
+        """
+        Tests the create_labels method.
+        Checks that the title and timer labels are created correctly and placed in the correct grid.
+        """
+        self.assertIsInstance(self.window.title_label, ttk.Label)
+        self.assertEqual(self.window.title_label['text'], 'Pomodoro Timer')
+        self.assertEqual(self.window.title_label.grid_info()['column'], 1)
+        self.assertEqual(self.window.title_label.grid_info()['row'], 0)
+        self.assertIsInstance(self.window.timer_label, ttk.Label)
+        self.assertEqual(self.window.timer_label['text'], '25:00')
+        self.assertEqual(self.window.timer_label.grid_info()['column'], 1)
+        self.assertEqual(self.window.timer_label.grid_info()['row'], 1)
 
     def test_create_buttons(self):
-        self.window.create_buttons()
-        self.window.start_button.grid.assert_called_once_with(column=0, row=0)
-        self.window.pause_button.grid.assert_called_once_with(column=0, row=1)
-        self.window.reset_button.grid.assert_called_once_with(column=0, row=2)
+        """
+        Tests the create_buttons method.
+        Checks that the start, pause, and reset buttons are created correctly and placed in the correct grid.
+        """
+        self.assertIsInstance(self.window.start_button, ttk.Button)
+        self.assertEqual(self.window.start_button['text'], 'Start')
+        self.assertEqual(self.window.start_button.grid_info()['column'], 0)
+        self.assertEqual(self.window.start_button.grid_info()['row'], 0)
+        self.assertIsInstance(self.window.pause_button, ttk.Button)
+        self.assertEqual(self.window.pause_button['text'], 'Pause')
+        self.assertEqual(self.window.pause_button.grid_info()['column'], 0)
+        self.assertEqual(self.window.pause_button.grid_info()['row'], 1)
+        self.assertIsInstance(self.window.reset_button, ttk.Button)
+        self.assertEqual(self.window.reset_button['text'], 'Reset')
+        self.assertEqual(self.window.reset_button.grid_info()['column'], 0)
+        self.assertEqual(self.window.reset_button.grid_info()['row'], 2)
 
     def test_run(self):
+        """
+        Tests the run method.
+        Checks that the Tkinter main loop is started.
+        """
         self.window.root.mainloop = MagicMock()
         self.window.run()
         self.window.root.mainloop.assert_called_once()

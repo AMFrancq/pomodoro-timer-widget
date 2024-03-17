@@ -6,22 +6,24 @@ from src.timer import Timer
 
 class TestTimer(unittest.TestCase):
     def setUp(self):
+        """Sets up the test environment before each test."""
         self.root = Tk()
         self.timer_label = ttk.Label(self.root)
         self.timer = Timer()
 
     def tearDown(self):
+        """Cleans up the test environment after each test."""
         self.root.destroy()
 
-    def test_stop_timer(self):
-        # Mock the after method
+    def test_stop_timer_when_timer_event_is_none(self):
+        """Tests the stop_timer method when timer_event is None."""
         self.root.after = MagicMock()
-
-        # Test stop_timer method when timer_event is None
         self.timer.stop_timer(self.root)
         self.assertFalse(self.timer.stopped)
 
-        # Test stop_timer method when timer_event is not None
+    def test_stop_timer_when_timer_event_is_not_none(self):
+        """Tests the stop_timer method when timer_event is not None."""
+        self.root.after = MagicMock()
         self.timer.timer_event = self.root.after(
             1000, self.timer.countdown, self.root, self.timer_label)
         self.timer.stop_timer(self.root)
@@ -30,17 +32,19 @@ class TestTimer(unittest.TestCase):
         self.root.after.assert_called_once_with(
             1000, self.timer.countdown, self.root, self.timer_label)
 
-    def test_reset_timer(self):
-        # Mock the after method
+    def test_reset_timer_when_timer_event_is_none(self):
+        """Tests the reset_timer method when timer_event is None."""
         self.root.after = MagicMock()
         self.root.after_cancel = MagicMock()
         self.timer_label.configure = MagicMock()
-
-        # Test reset_timer method when timer_event is None
         self.timer.reset_timer(self.root, self.timer_label)
         self.root.after_cancel.assert_not_called()
 
-        # Test reset_timer method when timer_event is not None
+    def test_reset_timer_when_timer_event_is_not_none(self):
+        """Tests the reset_timer method when timer_event is not None."""
+        self.root.after = MagicMock()
+        self.root.after_cancel = MagicMock()
+        self.timer_label.configure = MagicMock()
         self.timer_label.configure.reset_mock()
         self.timer.timer_event = self.root.after(
             1000, self.timer.countdown, self.root, self.timer_label)
@@ -51,16 +55,16 @@ class TestTimer(unittest.TestCase):
         self.assertIsNone(self.timer.timer_event)
         self.timer_label.configure.assert_called_once_with(text="25:00")
 
-    def test_start_timer(self):
-        # Mock the after method
+    def test_start_timer_when_timer_is_not_running_and_not_stopped(self):
+        """Tests the start_timer method when timer is not already running and not stopped."""
         self.timer.countdown = MagicMock()
-
-        # Test start_timer method when timer is not already running and not stopped
         self.timer.start_timer(self.root, self.timer_label)
         self.timer.countdown.assert_called_once_with(
             self.root, self.timer_label)
 
-        # Test start_timer method when timer is not already running and stopped
+    def test_start_timer_when_timer_is_not_running_and_stopped(self):
+        """Tests the start_timer method when timer is not already running and stopped."""
+        self.timer.countdown = MagicMock()
         self.timer.countdown.reset_mock()
         self.timer.stopped = True
         self.timer.start_timer(self.root, self.timer_label)
@@ -68,18 +72,18 @@ class TestTimer(unittest.TestCase):
         self.timer.countdown.assert_called_once_with(
             self.root, self.timer_label)
 
-        # Test start_timer method when timer is already running
+    def test_start_timer_when_timer_is_already_running(self):
+        """Tests the start_timer method when timer is already running."""
+        self.timer.countdown = MagicMock()
         self.timer.countdown.reset_mock()
         self.timer.timer_event = 1
         self.timer.start_timer(self.root, self.timer_label)
         self.timer.countdown.assert_not_called()
 
-    def test_countdown(self):
-        # Mock the after method
+    def test_countdown_when_time_is_greater_than_zero(self):
+        """Tests the countdown method when time is greater than 0."""
         self.root.after = MagicMock()
         self.timer_label.configure = MagicMock()
-
-        # Test countdown method when time is greater than 0
         self.timer.time = 5
         self.timer.countdown(self.root, self.timer_label)
         self.assertEqual(self.timer.time, 4)
@@ -87,7 +91,10 @@ class TestTimer(unittest.TestCase):
         self.root.after.assert_called_once_with(
             1000, self.timer.countdown, self.root, self.timer_label)
 
-        # Test countdown method when time is 0 and rest_state is False
+    def test_countdown_when_time_is_zero_and_rest_state_is_false(self):
+        """Tests the countdown method when time is 0 and rest_state is False."""
+        self.root.after = MagicMock()
+        self.timer_label.configure = MagicMock()
         self.root.after.reset_mock()
         self.timer_label.configure.reset_mock()
         self.timer.time = 0
@@ -99,7 +106,10 @@ class TestTimer(unittest.TestCase):
         self.root.after.assert_called_with(
             1000, self.timer.countdown, self.root, self.timer_label)
 
-        # Test countdown method when time is 0 and rest_state is True
+    def test_countdown_when_time_is_zero_and_rest_state_is_true(self):
+        """Tests the countdown method when time is 0 and rest_state is True."""
+        self.root.after = MagicMock()
+        self.timer_label.configure = MagicMock()
         self.root.after.reset_mock()
         self.timer_label.configure.reset_mock()
         self.timer.time = 0
@@ -110,7 +120,3 @@ class TestTimer(unittest.TestCase):
         self.timer_label.configure.assert_called_once_with(text="25:00")
         self.root.after.assert_called_with(
             1000, self.timer.countdown, self.root, self.timer_label)
-
-
-if __name__ == '__main__':
-    unittest.main()
