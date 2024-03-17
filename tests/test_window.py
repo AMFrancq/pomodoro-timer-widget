@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from tkinter import ttk
-from src.window import Window
+from core.window import Window
 
 
 class TestWindow(unittest.TestCase):

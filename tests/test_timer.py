@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from tkinter import Tk, ttk
-from src.timer import Timer
+from core.timer import Timer
 
 
 class TestTimer(unittest.TestCase):

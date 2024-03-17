@@ -2,7 +2,7 @@
 .venv
 
 # Workspace
-settings.json
+.vscode
 
 # Temporary files
 __pycache__/
