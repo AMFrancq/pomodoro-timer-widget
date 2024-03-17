@@ -32,10 +32,10 @@ class Timer:
 
     def __init__(self):
         """Initializes Timer with a timer event, a timer state, a time, and a rest state."""
-        self.timer_event = None
-        self.stopped = False
-        self.time = 1500  # Start with 25 minutes
-        self.rest_state = False  # Start in work state
+        self.timer_event: Tk.after = None
+        self.stopped: bool = False
+        self.time: int = 1500  # Start with 25 minutes
+        self.rest_state: bool = False  # Start in work state
 
     def stop_timer(self, root: Tk):
         """Stops the timer if it's running."""

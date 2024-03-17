@@ -50,7 +50,7 @@ class Window:
 
     def create_frame(self):
         """Creates and configures the main frame."""
-        self.frm = ttk.Frame(self.root, padding=10)
+        self.frm: ttk.Frame = ttk.Frame(self.root, padding=10)
         self.frm.grid()
         self.frm.columnconfigure(1, pad=10)
         self.frm.rowconfigure(0, pad=5)
@@ -59,21 +59,29 @@ class Window:
 
     def create_labels(self):
         """Creates the title and timer labels."""
-        self.title_label = ttk.Label(self.frm, text="Pomodoro Timer")
+        self.title_label: ttk.Label = ttk.Label(
+            self.frm, text="Pomodoro Timer")
         self.title_label.grid(column=1, row=0)
-        self.timer_label = ttk.Label(self.frm, text="25:00")
+        self.timer_label: ttk.Label = ttk.Label(
+            self.frm, text="25:00")
         self.timer_label.grid(column=1, row=1)
 
     def create_buttons(self):
         """Creates the start, pause, and reset buttons."""
-        self.start_button = ttk.Button(self.frm, text="Start", command=lambda: self.timer.start_timer(
-            self.root, self.timer_label))
+        self.start_button: ttk.Button = ttk.Button(
+            self.frm, text="Start",
+            command=lambda: self.timer.start_timer(
+                self.root, self.timer_label))
         self.start_button.grid(column=0, row=0)
-        self.pause_button = ttk.Button(self.frm, text="Pause", command=lambda: self.timer.stop_timer(
-            self.root))
+        self.pause_button: ttk.Button = ttk.Button(
+            self.frm, text="Pause",
+            command=lambda: self.timer.stop_timer(
+                self.root))
         self.pause_button.grid(column=0, row=1)
-        self.reset_button = ttk.Button(self.frm, text="Reset", command=lambda: self.timer.reset_timer(
-            self.root, self.timer_label))
+        self.reset_button: ttk.Button = ttk.Button(
+            self.frm, text="Reset",
+            command=lambda: self.timer.reset_timer(
+                self.root, self.timer_label))
         self.reset_button.grid(column=0, row=2)
 
     def run(self):
